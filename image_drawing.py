@@ -10,8 +10,8 @@ for pyautogui, please refer to this doc:
 https://pyautogui.readthedocs.io/en/latest/quickstart.html
 
 run test 
-image_drawing.py image-file, func [0:drag_draw, 1:mouse_click]
-python image_drawing.py "IMG_825.jpg" 0
+test.py image-file, func {drag_draw|click}
+python test.py IMG_825.jpg drag
 '''
 imagefile = "IMG_825.jpg"
 
@@ -54,7 +54,7 @@ def convert_image_to_array(imagefile):
 
 class draw():
     def __init__(self, x_start,y_start):
-        pyautogui.PAUSE = 2.5
+        #  pyautogui.PAUSE = 2.5
         pyautogui.FAILSAFE = True
         self.x=x_start
         self.y=y_start
@@ -65,24 +65,27 @@ class draw():
     def drag_draw(self, d):   # d[0] x_start, d[1] x_end, d[2] y
         xs, xe, y = self.abs_position(d)
         pyautogui.moveTo(xs, y)
-
         pyautogui.dragTo(xe, y)
+        time.sleep(0.005)
 
     def mouse_tick(self, d):
         xs, xe, y = self.abs_position(d)
         for x in range(xs,xe):
             pyautogui.click(x, y)
+            time.sleep(0.005)
 
 if __name__ == '__main__':
-    imagefile = 
+    imagefile = sys.argv[1]
+    func = sys.argv[2]
     arrayfile = f"{imagefile}.txt"
+    
     if not os.path.isfile(arrayfile):
         arrayfile = convert_image_to_array(imagefile)
-
     x_start = 1000
     y_start = 500
     image_array = sys.argv[1]
     func = sys.argv[2]
+    print(f'input imagefile: {imagefile} func: {func}')
     with open(arrayfile, "r") as f:
         image_array = json.load(f)
 
@@ -91,11 +94,12 @@ if __name__ == '__main__':
     for d in image_array:
         if i % 10 == 0: 
             print(f'drawing dataset: {d}')
-            time.sleep(0.005)
-        if func == 0 :
+            
+        if func == 'drag' :
             my_draw.drag_draw(d)
-        elif func == 1 :
+        elif func == 'click' :
             my_draw.mouse_tick(d)
-        
+        else:
+            print(f'Error, not such function {func}')        
         i += 1
 
