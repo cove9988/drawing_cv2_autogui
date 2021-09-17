@@ -10,8 +10,8 @@ for pyautogui, please refer to this doc:
 https://pyautogui.readthedocs.io/en/latest/quickstart.html
 
 run test 
-test.py image-file, func [0:drag_draw, 1:mouse_click]
-python test.py "IMG_825.jpg" 0
+image_drawing.py image-file, func [0:drag_draw, 1:mouse_click]
+python image_drawing.py "IMG_825.jpg" 0
 '''
 imagefile = "IMG_825.jpg"
 
